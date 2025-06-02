@@ -57,3 +57,4 @@ WaitUntil DI_DS=1;
                 Greifer_AUF;
 	ENDFOR
 
+!UNBEDINGT: richtigen Kreis aus meiner Schulversion klauen und merken!
