@@ -1,0 +1,59 @@
+!*************
+! neues Blanko System
+!	Version 1.0
+!	Marlene Kaser
+!**************
+
+TASK PERS tooldata toKSMA:=[TRUE,[[14.8567,-76.4074,164.482],[1,0,0,0]],[0.5,[0,0,50],[1,0,0,0],0,0,0]];
+CONST jointtarget pHome:=[[0,0,0,0,90,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+
+!***************
+!Ampel setzen und rücksetzen
+!**************
+    Set DO_AmpGN;
+    Reset DO_AmpBL;
+    Reset DO_AmpRT;
+
+!****************
+! auf Freigabe warten
+!*****************
+WaitUntil DI_DS=1;
+
+!**********************
+!If-Anweisung
+!**********************
+    IF DI_GrOffen=0 AND DI_GrGeschlossen=1 THEN
+	WaitUntil DI_DS=1;
+	MoveJ pHome,v100,z50,toKSMA;
+    WaitTime 0.2;
+    ENDIF
+	
+!***************************
+!Benutzereingabe abfragen
+!**************************
+	IF EINRICHT = TRUE THEN
+            Greifer_TEST;
+            WaitTime 3;
+            TPErase;
+            TPWrite "...";
+            TPReadFK reg1,"Vorbereitungen ok?",stEmpty,"NEIN",stEmpty,"JA",stEmpty;
+            TEST reg1
+                CASE 2: TPerase; TPwrite "Vorbereitungen korrekt abschließen!";
+                CASE 4: TPerase; TPwrite "..."; TPwrite "Weiter mit Einrichtbetrieb"; Startverausetzung:=TRUE;
+                DEFAULT:
+            ENDTEST
+    ENDIF
+	
+!*******************
+!Zuweisung einer Variable
+!**********************
+	a:=15;
+	
+	
+!********************
+!For-Schleife
+!******************
+	FOR i FROM 1 TO 5 DO
+                Greifer_AUF;
+	ENDFOR
+
